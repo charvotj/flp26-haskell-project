@@ -44,7 +44,7 @@ optionsParserInfo =
 -- is probably somehow building a @Parser@ using some simpler String parsers, by somehow *applying* the @Options@
 -- function on them, step by step, ultimately building a fully applied @Parser Options@.
 --
--- In deed, the <$> and <*> operators are somewhat of a generalization of this normal application. The @argument@, 
+-- In deed, the <$> and <*> operators are somewhat of a generalization of this normal application. The @argument@,
 -- @optional@, @switch@ functions below return a *monadic* @Parser String@ - a type that "when evaluated (somehow),
 -- it will provide us with a parsed CLI argument as a String" (this should ring a bell - think Prep and Lab 3).
 --
@@ -53,7 +53,7 @@ optionsParserInfo =
 -- convert the @Parser String@ to a @Parser (sth1 -> sth2 -> ... -> Options)@ - so that's a function enclosed in
 -- some monadic context. The <*> operator reads as "apply" and does exactly that: combines the two monads so that
 -- the function in the first is applied on the value in the second. So after the first <*>, you now have
--- @Parser (sth2 -> ... -> Options)@. 
+-- @Parser (sth2 -> ... -> Options)@.
 --
 -- Do this as many times as needed to construct the @Options@ data instance and you suddenly get a @Parser Options@.
 -- The nice thing is that you don't care at all about how the library actually achieves this. This monadic heavy

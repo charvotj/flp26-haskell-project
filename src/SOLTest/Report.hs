@@ -8,7 +8,7 @@ module SOLTest.Report
     groupByCategory,
     computeStats,
     computeHistogram,
-    rateToBin
+    rateToBin,
   )
 where
 
