@@ -10,6 +10,7 @@ where
 
 import Options.Applicative
 import SOLTest.Types
+import SOLTest.Types (FilterCriterion(ByAny, ByCategory, ByTag))
 
 -- | Parse command-line arguments into an 'Options' record.
 -- Exits with a help message on @--help@ or on invalid arguments.
@@ -151,7 +152,12 @@ filterSpecParser =
 
 -- | Assemble raw filter string lists into a 'FilterSpec'.
 --
--- FLP: Implement this function (read the long comment above first).
+-- -FLP: Implement this function (read the long comment above first).
 
--- buildFilterSpec :: ??? -> FilterSpec
--- buildFilterSpec ???
+buildFilterSpec :: [String] -> [String] -> [String] -> [String] -> [String] -> [String] -> FilterSpec
+buildFilterSpec inc exc ic it ec et =
+  FilterSpec
+    { fsIncludes = map ByAny inc ++ map ByCategory ic ++ map ByTag it
+    , fsExcludes = map ByAny exc ++ map ByCategory ec ++ map ByTag et
+    , fsUseRegex = False
+    }
