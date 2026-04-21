@@ -81,7 +81,7 @@ emptyHeader =
 splitHeaderBody :: String -> ([String], String)
 splitHeaderBody content =
   -- define helper recursive function
-  let fun(headerLns, []) = fun (headerLns, [])
+  let fun (headerLns, []) = (headerLns, [])
       fun (headerLns, x:xs) =
         if all isSpace x
           then (headerLns, xs) -- end of recursion

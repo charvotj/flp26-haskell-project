@@ -6,7 +6,7 @@ import System.Directory
   ( doesFileExist,
     listDirectory, doesDirectoryExist,
   )
-import System.FilePath (replaceExtension, takeBaseName, (</>))
+import System.FilePath (replaceExtension, takeBaseName, (</>), takeExtension)
 import Control.Monad (filterM)
 
 -- | Discover all @.test@ files in a directory.
@@ -25,11 +25,13 @@ discoverTests recursive dir = do
   -- split fullPaths into two lists
   dirPaths <- filterM doesDirectoryExist fullPaths
   filePaths <- filterM (fmap not . doesDirectoryExist) fullPaths
+  -- filter filePaths
+  let filePathsFil = filter (\x -> takeExtension x == ".test") filePaths
   -- procces each list separately
-  fileTests <- mapM findCompanionFiles filePaths
-  dirTests <- if recursive then concat <$> mapM (discoverTests True) dirPaths else return []
+  filesHere <- mapM findCompanionFiles filePathsFil
+  filesRecursed <- if recursive then concat <$> mapM (discoverTests True) dirPaths else return []
   -- return them concatenated
-  return (fileTests ++ dirTests)
+  return (filesHere ++ filesRecursed)
 
 -- | Build a 'TestCaseFile' for a given @.test@ file path, checking for
 -- companion @.in@ and @.out@ files in the same directory.
