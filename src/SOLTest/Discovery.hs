@@ -4,9 +4,10 @@ module SOLTest.Discovery (discoverTests) where
 import SOLTest.Types
 import System.Directory
   ( doesFileExist,
-    listDirectory,
+    listDirectory, doesDirectoryExist,
   )
 import System.FilePath (replaceExtension, takeBaseName, (</>))
+import Control.Monad (filterM)
 
 -- | Discover all @.test@ files in a directory.
 --
@@ -14,15 +15,21 @@ import System.FilePath (replaceExtension, takeBaseName, (</>))
 -- Returns a list of 'TestCaseFile' records, one per @.test@ file found.
 -- The list is ordered by the file system traversal order (not sorted).
 --
--- FLP: Implement this function. The following functions may come in handy:
+-- -FLP: Implement this function. The following functions may come in handy:
 --      @doesDirectoryExist@, @takeExtension@, @forM@ or @mapM@,
 --      @findCompanionFiles@ (below).
 discoverTests :: Bool -> FilePath -> IO [TestCaseFile]
 discoverTests recursive dir = do
   entries <- listDirectory dir
   let fullPaths = map (dir </>) entries
-  -- ???
-  return [] -- replace [] with your list of discovered TestCaseFile
+  -- split fullPaths into two lists
+  dirPaths <- filterM doesDirectoryExist fullPaths
+  filePaths <- filterM (fmap not . doesDirectoryExist) fullPaths
+  -- procces each list separately
+  fileTests <- mapM findCompanionFiles filePaths
+  dirTests <- if recursive then concat <$> mapM (discoverTests True) dirPaths else return []
+  -- return them concatenated
+  return (fileTests ++ dirTests)
 
 -- | Build a 'TestCaseFile' for a given @.test@ file path, checking for
 -- companion @.in@ and @.out@ files in the same directory.
