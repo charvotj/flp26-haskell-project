@@ -81,10 +81,11 @@ emptyHeader =
 splitHeaderBody :: String -> ([String], String)
 splitHeaderBody content =
   -- define helper recursive function
-  let fun (headerLns, lns) =
-        if all isSpace (head lns)
-          then (headerLns, tail lns) -- end of recursion
-          else fun (head lns:headerLns, tail lns)
+  let fun(headerLns, []) = fun (headerLns, [])
+      fun (headerLns, x:xs) =
+        if all isSpace x
+          then (headerLns, xs) -- end of recursion
+          else fun (x:headerLns, xs)
       -- call the recursion function
       (hdrLinesRev, bodyLines) = fun ([],lines content)
   -- format results
@@ -128,7 +129,7 @@ parseHeaderLine hdr line
           Nothing -> Left ("Error parsing weight on line: " ++ line)
 
   | "!C! " `isPrefixOf` line =
-      let val = readMaybe (trim (drop 4 line)) 
+      let val = readMaybe (trim (drop 4 line))
        in case val of
           Just correct -> Right hdr {phParserCodes = correct : phParserCodes hdr}
           Nothing -> Left ("Error parsing expected parser code on line: " ++ line)
@@ -137,7 +138,7 @@ parseHeaderLine hdr line
        in case val of
           Just correct -> Right hdr {phInterpreterCodes = correct : phInterpreterCodes hdr}
           Nothing -> Left ("Error parsing expected interpreter code on line: " ++ line)
-        
+
   | otherwise = Right hdr -- unknown or comment line: skip
 
 -- | Parse all header lines into a 'ParsedHeader'.
