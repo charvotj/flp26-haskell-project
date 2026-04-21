@@ -26,6 +26,7 @@ import SOLTest.Types
       ),
     TestCaseType (..),
   )
+import Text.Read (readMaybe)
 
 -- ---------------------------------------------------------------------------
 -- Intermediate header type
@@ -76,9 +77,18 @@ emptyHeader =
 -- If there is no empty line, all lines are treated as header lines and the
 -- body is empty.
 --
--- FLP: Implement this function.
+-- -FLP: Implement this function.
 splitHeaderBody :: String -> ([String], String)
-splitHeaderBody content = undefined
+splitHeaderBody content =
+  -- define helper recursive function
+  let fun (headerLns, lns) =
+        if all isSpace (head lns)
+          then (headerLns, tail lns) -- end of recursion
+          else fun (head lns:headerLns, tail lns)
+      -- call the recursion function
+      (hdrLinesRev, bodyLines) = fun ([],lines content)
+  -- format results
+  in (reverse hdrLinesRev, unlines bodyLines)
 
 -- ---------------------------------------------------------------------------
 -- Header line parsing
@@ -90,13 +100,44 @@ splitHeaderBody content = undefined
 -- a malformed value (e.g. a non-integer weight). Lines with unrecognised
 -- prefixes are silently ignored, as the spec does not prohibit extra lines.
 --
--- FLP: Implement the rules for all accepted headers.
+-- -FLP: Implement the rules for all accepted headers.
 parseHeaderLine :: ParsedHeader -> String -> Either String ParsedHeader
 parseHeaderLine hdr line
   | "*** " `isPrefixOf` line =
       let val = trim (drop 4 line)
        in Right hdr {phDescription = Just val}
-  -- ???
+
+  | "+++ " `isPrefixOf` line =
+      let val = trim (drop 4 line)
+          cond = not (all isSpace val)
+          ok = Right hdr {phCategory = Just val}
+          err = Left ("Error - empty cathegory on line: " ++ line)
+      in if cond then ok else err
+
+  | "--- " `isPrefixOf` line =
+      let val = trim (drop 4 line)
+          cond = not (all isSpace val)
+          ok = Right hdr {phTags = val : phTags hdr}
+          err = Left ("Error - empty tag on line: " ++ line)
+       in if cond then ok else err
+
+  | ">>> " `isPrefixOf` line =
+      let val = readMaybe (trim (drop 4 line))
+      in case val of
+          Just _ -> Right hdr {phWeight = val}
+          Nothing -> Left ("Error parsing weight on line: " ++ line)
+
+  | "!C! " `isPrefixOf` line =
+      let val = readMaybe (trim (drop 4 line)) 
+       in case val of
+          Just correct -> Right hdr {phParserCodes = correct : phParserCodes hdr}
+          Nothing -> Left ("Error parsing expected parser code on line: " ++ line)
+  | "!I! " `isPrefixOf` line =
+      let val = readMaybe (trim (drop 4 line))
+       in case val of
+          Just correct -> Right hdr {phInterpreterCodes = correct : phInterpreterCodes hdr}
+          Nothing -> Left ("Error parsing expected interpreter code on line: " ++ line)
+        
   | otherwise = Right hdr -- unknown or comment line: skip
 
 -- | Parse all header lines into a 'ParsedHeader'.
@@ -188,9 +229,13 @@ parseTestFile tcf content = do
 -- is 'Nothing' (the parser must exit 0, which is implicit and not stored in the
 -- list); if @!C! 0@ was explicit, it is stored as @Just [0]@.
 --
--- FLP: Implement this function.
+-- -FLP: Implement this function.
 buildExitCodes :: TestCaseType -> ParsedHeader -> (Maybe [Int], Maybe [Int])
-buildExitCodes = undefined
+buildExitCodes _ hdr =
+  let pCodes = phParserCodes hdr
+      iCodes = phInterpreterCodes hdr
+      check a = if null a then Nothing else Just a
+   in (check pCodes, check iCodes)
 
 -- ---------------------------------------------------------------------------
 -- Utilities
