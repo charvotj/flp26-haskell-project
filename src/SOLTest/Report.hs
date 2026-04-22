@@ -15,6 +15,8 @@ where
 import Data.Map.Strict (Map)
 import Data.Map.Strict qualified as Map
 import SOLTest.Types
+import Data.Maybe (isJust, fromJust)
+import GHC.Float (int2Double)
 
 -- ---------------------------------------------------------------------------
 -- Top-level report assembly
@@ -56,14 +58,38 @@ buildReport discovered unexecuted mResults selected foundCount =
 --
 -- The @definitions@ list is used to look up each test's category and points.
 --
--- FLP: Implement this function. The following functions may (or may not) come in handy:
+-- -FLP: Implement this function. The following functions may (or may not) come in handy:
 --      @Map.fromList@, @Map.foldlWithKey'@, @Map.empty@, @Map.lookup@, @Map.insertWith@,
 --      @Map.map@, @Map.fromList@
 groupByCategory ::
   [TestCaseDefinition] ->
   Map String TestCaseReport ->
   Map String CategoryReport
-groupByCategory definitions results = undefined
+groupByCategory definitions results =
+  let catMapInit = Map.empty
+      addCats catA catB =
+        CategoryReport
+        {
+           crTotalPoints = crTotalPoints catA + (crTotalPoints catB)
+          ,crPassedPoints = crPassedPoints catA + (crPassedPoints catB)
+          ,crTestResults = Map.union (crTestResults catA) (crTestResults catB)
+        }
+      addToCat tcd catMap =
+        let name = tcdName tcd
+            catName = tcdCategory tcd
+            pts = tcdPoints tcd
+            rep = Map.lookup name results
+            catRep =
+              CategoryReport
+              {
+                crTotalPoints = pts
+                ,crPassedPoints = if Passed == (tcrResult (fromJust rep)) then pts else 0
+                ,crTestResults = Map.fromList [(catName,fromJust rep)]
+              }
+          in
+            if isJust rep then Map.insertWith addCats catName catRep catMap else catMap
+    in
+      foldr addToCat catMapInit definitions
 
 -- ---------------------------------------------------------------------------
 -- Statistics
@@ -71,7 +97,7 @@ groupByCategory definitions results = undefined
 
 -- | Compute the 'TestStats' from available information.
 --
--- FLP: Implement this function. You'll use @computeHistogram@ here.
+-- -FLP: Implement this function. You'll use @computeHistogram@ here.
 computeStats ::
   -- | Total @.test@ files found on disk.
   Int ->
@@ -82,7 +108,18 @@ computeStats ::
   -- | Category reports (Nothing in dry-run mode).
   Maybe (Map String CategoryReport) ->
   TestStats
-computeStats foundCount loadedCount selectedCount mCategoryResults = undefined
+computeStats foundCount loadedCount selectedCount mCategoryResults = 
+  let mp = fromJust mCategoryResults 
+      hist = computeHistogram mp
+      ts = TestStats
+        {
+          tsFoundTestFiles = foundCount
+          ,tsLoadedTests = loadedCount
+          ,tsSelectedTests = selectedCount
+          ,tsPassedTests = Map.foldl' (+) 0 hist -- sum histogram to get total passes
+          ,tsHistogram = hist
+        }
+    in ts
 
 -- ---------------------------------------------------------------------------
 -- Histogram
@@ -98,9 +135,15 @@ computeStats foundCount loadedCount selectedCount mCategoryResults = undefined
 -- of categories in each bin is accumulated. All ten bins are always present in
 -- the result, even if their count is 0.
 --
--- FLP: Implement this function.
+-- -FLP: Implement this function.
 computeHistogram :: Map String CategoryReport -> Map String Int
-computeHistogram categories = undefined
+computeHistogram categories =
+  let emptyHist = Map.fromList [("0." ++ show i, 0) | i <- [0..9]::[Int]]
+      addToHist c m =
+        let rate = int2Double (crPassedPoints c) / int2Double (crTotalPoints c)
+            bin = rateToBin rate
+        in Map.insertWith (+) bin 1 m
+  in Map.foldr addToHist emptyHist categories
 
 -- | Map a pass rate in @[0, 1]@ to a histogram bin key.
 --
