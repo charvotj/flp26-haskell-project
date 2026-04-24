@@ -146,7 +146,7 @@ computeStats foundCount loadedCount selectedCount mCategoryResults =
 -- -FLP: Implement this function.
 computeHistogram :: Map String CategoryReport -> Map String Int
 computeHistogram categories =
-  let emptyHist = Map.fromList [("0." ++ show i, 0) | i <- [0..9]::[Int]]
+  let emptyHist = Map.fromList [("0." ++ show i, 0) | i <- [0..9]::[Int]] -- AI: this list comprehension was written by ChatGPT
       addToHist c m =
         let rate = int2Double (crPassedPoints c) / int2Double (crTotalPoints c)
             bin = rateToBin rate

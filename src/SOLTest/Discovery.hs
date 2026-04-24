@@ -18,6 +18,7 @@ import Control.Monad (filterM)
 -- -FLP: Implement this function. The following functions may come in handy:
 --      @doesDirectoryExist@, @takeExtension@, @forM@ or @mapM@,
 --      @findCompanionFiles@ (below).
+-- AI: This function was partially impelented by ChatGPT, then refactored by me
 discoverTests :: Bool -> FilePath -> IO [TestCaseFile]
 discoverTests recursive dir = do
   entries <- listDirectory dir
