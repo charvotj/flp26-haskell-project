@@ -3,11 +3,12 @@ Configuration is affected by the following files:
 - cabal.project
 Build profile: -w ghc-9.6.7 -O1
 In order, the following will be built (use -v for more details):
- - flp-fun-0.1.0.0 (lib:flp-fun-lib) (file src/SOLTest/Parser.hs changed)
+ - flp-fun-0.1.0.0 (lib:flp-fun-lib) (configuration changed)
  - flp-fun-0.1.0.0 (test:flp-fun-tests) (dependency rebuilt)
+Configuring library 'flp-fun-lib' for flp-fun-0.1.0.0...
 Preprocessing library 'flp-fun-lib' for flp-fun-0.1.0.0...
 Building library 'flp-fun-lib' for flp-fun-0.1.0.0...
-[3 of 8] Compiling SOLTest.Parser   ( src/SOLTest/Parser.hs, dist-newstyle/build/x86_64-linux/ghc-9.6.7/flp-fun-0.1.0.0/l/flp-fun-lib/build/flp-fun-lib/SOLTest/Parser.o, dist-newstyle/build/x86_64-linux/ghc-9.6.7/flp-fun-0.1.0.0/l/flp-fun-lib/build/flp-fun-lib/SOLTest/Parser.dyn_o ) [Source file changed]
+[2 of 8] Compiling SOLTest.Report   ( src/SOLTest/Report.hs, dist-newstyle/build/x86_64-linux/ghc-9.6.7/flp-fun-0.1.0.0/l/flp-fun-lib/build/flp-fun-lib/SOLTest/Report.o, dist-newstyle/build/x86_64-linux/ghc-9.6.7/flp-fun-0.1.0.0/l/flp-fun-lib/build/flp-fun-lib/SOLTest/Report.dyn_o ) [Source file changed]
 Preprocessing test suite 'flp-fun-tests' for flp-fun-0.1.0.0...
 Building test suite 'flp-fun-tests' for flp-fun-0.1.0.0...
 [6 of 6] Linking dist-newstyle/build/x86_64-linux/ghc-9.6.7/flp-fun-0.1.0.0/t/flp-fun-tests/build/flp-fun-tests/flp-fun-tests [Library changed]
@@ -36,12 +37,12 @@ Test suite flp-fun-tests: RUNNING...
 +++ OK, passed 200 tests.
 +++ OK, passed 100 tests.
 +++ OK, passed 200 tests.
-+++ OK, passed 200 tests; 29 discarded.
-+++ OK, passed 200 tests; 28 discarded.
-+++ OK, passed 200 tests; 24 discarded.
++++ OK, passed 200 tests; 30 discarded.
++++ OK, passed 200 tests; 31 discarded.
++++ OK, passed 200 tests; 31 discarded.
 +++ OK, passed 100 tests.
-+++ OK, passed 200 tests; 29 discarded.
-+++ OK, passed 200 tests; 41 discarded.
++++ OK, passed 200 tests; 33 discarded.
++++ OK, passed 200 tests; 35 discarded.
 +++ OK, passed 200 tests.
 +++ OK, passed 200 tests.
 +++ OK, passed 100 tests.
@@ -49,36 +50,36 @@ Test suite flp-fun-tests: RUNNING...
 +++ OK, passed 200 tests.
 +++ OK, passed 200 tests.
 === Filter properties ===
-*** Failed! Falsified (after 3 tests):                  
-[TestCaseDefinition {tcdName = "90Jr5", tcdTestSourcePath = "90Jr5.test", tcdStdinFile = Nothing, tcdExpectedStdoutFile = Nothing, tcdTestType = ExecuteOnly, tcdDescription = Nothing, tcdCategory = "Kvoby2GGeTUQJLC", tcdTags = ["S2ZnnKmLCOhyLeA"], tcdPoints = 1, tcdExpectedParserExitCodes = Nothing, tcdExpectedInterpreterExitCodes = Just [0], tcdSourceCode = ""}]
+*** Failed! Falsified (after 2 tests):                  
+[TestCaseDefinition {tcdName = "S5zux5", tcdTestSourcePath = "S5zux5.test", tcdStdinFile = Nothing, tcdExpectedStdoutFile = Nothing, tcdTestType = ExecuteOnly, tcdDescription = Nothing, tcdCategory = "0M1", tcdTags = ["mBDP"], tcdPoints = 3, tcdExpectedParserExitCodes = Nothing, tcdExpectedInterpreterExitCodes = Just [0], tcdSourceCode = ""}]
 +++ OK, passed 200 tests.
 +++ OK, passed 200 tests.
 +++ OK, passed 200 tests.
-+++ OK, passed 200 tests; 29 discarded.
++++ OK, passed 200 tests; 28 discarded.
 +++ OK, passed 200 tests.
 +++ OK, passed 200 tests.
-+++ OK, passed 200 tests; 30 discarded.
++++ OK, passed 200 tests; 32 discarded.
 *** Failed! Falsified (after 1 test):  
-TestCaseDefinition {tcdName = "SnNlW", tcdTestSourcePath = "SnNlW.test", tcdStdinFile = Nothing, tcdExpectedStdoutFile = Nothing, tcdTestType = ExecuteOnly, tcdDescription = Nothing, tcdCategory = "4QYnOrN04k", tcdTags = [], tcdPoints = 4, tcdExpectedParserExitCodes = Nothing, tcdExpectedInterpreterExitCodes = Just [0], tcdSourceCode = ""}
+TestCaseDefinition {tcdName = "pKf8pX6ecb_2J", tcdTestSourcePath = "pKf8pX6ecb_2J.test", tcdStdinFile = Nothing, tcdExpectedStdoutFile = Nothing, tcdTestType = Combined, tcdDescription = Nothing, tcdCategory = "P2QmwWOKvkdPEU8e", tcdTags = [], tcdPoints = 9, tcdExpectedParserExitCodes = Nothing, tcdExpectedInterpreterExitCodes = Just [0], tcdSourceCode = ""}
 === Report properties ===
 +++ OK, passed 100 tests.
 +++ OK, passed 100 tests.
 +++ OK, passed 100 tests.
 +++ OK, passed 100 tests.
 +++ OK, passed 100 tests.
-+++ OK, passed 200 tests.
-*** Failed! Falsified (after 4 tests):  
-[("cat_c",CategoryReport {crTotalPoints = 1, crPassedPoints = 0, crTestResults = fromList [("test_0",TestCaseReport {tcrResult = ParseFail, tcrParserExitCode = Nothing, tcrInterpreterExitCode = Nothing, tcrParserStdout = Nothing, tcrParserStderr = Nothing, tcrInterpreterStdout = Nothing, tcrInterpreterStderr = Nothing, tcrDiffOutput = Nothing})]}),("cat_a",CategoryReport {crTotalPoints = 0, crPassedPoints = 0, crTestResults = fromList []})]
-["-922337203685477581.2","0.0","0.1","0.2","0.3","0.4","0.5","0.6","0.7","0.8","0.9"] /= ["0.0","0.1","0.2","0.3","0.4","0.5","0.6","0.7","0.8","0.9"]
-+++ OK, passed 100 tests.
-+++ OK, passed 200 tests.
-+++ OK, passed 200 tests.
+*** Failed! Falsified (after 3 tests):  
+[("cat_a",CategoryReport {crTotalPoints = 0, crPassedPoints = 0, crTestResults = fromList []})]
+0 /= 1
 +++ OK, passed 200 tests.
 +++ OK, passed 100 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
 +++ OK, passed 100 tests.
-*** Failed! Falsified (after 5 tests):  
-[("cat_c",CategoryReport {crTotalPoints = 1, crPassedPoints = 0, crTestResults = fromList [("test_0",TestCaseReport {tcrResult = ParseFail, tcrParserExitCode = Nothing, tcrInterpreterExitCode = Nothing, tcrParserStdout = Nothing, tcrParserStderr = Nothing, tcrInterpreterStdout = Nothing, tcrInterpreterStderr = Nothing, tcrDiffOutput = Nothing})]}),("cat_d",CategoryReport {crTotalPoints = 4, crPassedPoints = 0, crTestResults = fromList [("test_0",TestCaseReport {tcrResult = DiffFail, tcrParserExitCode = Nothing, tcrInterpreterExitCode = Nothing, tcrParserStdout = Nothing, tcrParserStderr = Nothing, tcrInterpreterStdout = Nothing, tcrInterpreterStderr = Nothing, tcrDiffOutput = Nothing}),("test_1",TestCaseReport {tcrResult = DiffFail, tcrParserExitCode = Nothing, tcrInterpreterExitCode = Nothing, tcrParserStdout = Nothing, tcrParserStderr = Nothing, tcrInterpreterStdout = Nothing, tcrInterpreterStderr = Nothing, tcrDiffOutput = Nothing}),("test_2",TestCaseReport {tcrResult = ParseFail, tcrParserExitCode = Nothing, tcrInterpreterExitCode = Nothing, tcrParserStdout = Nothing, tcrParserStderr = Nothing, tcrInterpreterStdout = Nothing, tcrInterpreterStderr = Nothing, tcrDiffOutput = Nothing}),("test_3",TestCaseReport {tcrResult = ParseFail, tcrParserExitCode = Nothing, tcrInterpreterExitCode = Nothing, tcrParserStdout = Nothing, tcrParserStderr = Nothing, tcrInterpreterStdout = Nothing, tcrInterpreterStderr = Nothing, tcrDiffOutput = Nothing})]}),("cat_b",CategoryReport {crTotalPoints = 0, crPassedPoints = 0, crTestResults = fromList []})]
-3 /= 0
++++ OK, passed 100 tests.
+*** Failed! Falsified (after 3 tests):  
+[("cat_b",CategoryReport {crTotalPoints = 2, crPassedPoints = 0, crTestResults = fromList [("test_0",TestCaseReport {tcrResult = DiffFail, tcrParserExitCode = Nothing, tcrInterpreterExitCode = Nothing, tcrParserStdout = Nothing, tcrParserStderr = Nothing, tcrInterpreterStdout = Nothing, tcrInterpreterStderr = Nothing, tcrDiffOutput = Nothing}),("test_1",TestCaseReport {tcrResult = DiffFail, tcrParserExitCode = Nothing, tcrInterpreterExitCode = Nothing, tcrParserStdout = Nothing, tcrParserStderr = Nothing, tcrInterpreterStdout = Nothing, tcrInterpreterStderr = Nothing, tcrDiffOutput = Nothing})]}),("cat_c",CategoryReport {crTotalPoints = 1, crPassedPoints = 0, crTestResults = fromList [("test_0",TestCaseReport {tcrResult = DiffFail, tcrParserExitCode = Nothing, tcrInterpreterExitCode = Nothing, tcrParserStdout = Nothing, tcrParserStderr = Nothing, tcrInterpreterStdout = Nothing, tcrInterpreterStderr = Nothing, tcrDiffOutput = Nothing})]})]
+2 /= 0
 Test suite flp-fun-tests: PASS
 Test suite logged to:
 /run/media/jakub/DATA/VUT/Patak/FLP/projects/flp-proj1/flp26-haskell-project/./dist-newstyle/build/x86_64-linux/ghc-9.6.7/flp-fun-0.1.0.0/t/flp-fun-tests/test/flp-fun-0.1.0.0-flp-fun-tests.log

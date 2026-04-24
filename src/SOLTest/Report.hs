@@ -150,7 +150,8 @@ computeHistogram categories =
       addToHist c m =
         let rate = int2Double (crPassedPoints c) / int2Double (crTotalPoints c)
             bin = rateToBin rate
-        in Map.insertWith (+) bin 1 m
+            rateValid = rate >= 0.0
+        in if rateValid then Map.insertWith (+) bin 1 m else m
   in Map.foldr addToHist emptyHist categories
 
 -- | Map a pass rate in @[0, 1]@ to a histogram bin key.
