@@ -1,0 +1,95 @@
+Configuration is affected by the following files:
+- cabal.project
+Build profile: -w ghc-9.6.7 -O1
+In order, the following will be built (use -v for more details):
+ - flp-fun-0.1.0.0 (lib:flp-fun-lib) (file src/SOLTest/Report.hs changed)
+ - flp-fun-0.1.0.0 (test:flp-fun-tests) (dependency rebuilt)
+Preprocessing library 'flp-fun-lib' for flp-fun-0.1.0.0...
+Building library 'flp-fun-lib' for flp-fun-0.1.0.0...
+[2 of 8] Compiling SOLTest.Report   ( src/SOLTest/Report.hs, dist-newstyle/build/x86_64-linux/ghc-9.6.7/flp-fun-0.1.0.0/l/flp-fun-lib/build/flp-fun-lib/SOLTest/Report.o, dist-newstyle/build/x86_64-linux/ghc-9.6.7/flp-fun-0.1.0.0/l/flp-fun-lib/build/flp-fun-lib/SOLTest/Report.dyn_o ) [Source file changed]
+[6 of 8] Compiling SOLTest.Executor ( src/SOLTest/Executor.hs, dist-newstyle/build/x86_64-linux/ghc-9.6.7/flp-fun-0.1.0.0/l/flp-fun-lib/build/flp-fun-lib/SOLTest/Executor.o, dist-newstyle/build/x86_64-linux/ghc-9.6.7/flp-fun-0.1.0.0/l/flp-fun-lib/build/flp-fun-lib/SOLTest/Executor.dyn_o ) [Source file changed]
+Preprocessing test suite 'flp-fun-tests' for flp-fun-0.1.0.0...
+Building test suite 'flp-fun-tests' for flp-fun-0.1.0.0...
+[4 of 5] Compiling SOLTest.ReportSpec ( test/SOLTest/ReportSpec.hs, dist-newstyle/build/x86_64-linux/ghc-9.6.7/flp-fun-0.1.0.0/t/flp-fun-tests/build/flp-fun-tests/flp-fun-tests-tmp/SOLTest/ReportSpec.o ) [SOLTest.Report changed]
+[5 of 5] Compiling Main             ( test/Spec.hs, dist-newstyle/build/x86_64-linux/ghc-9.6.7/flp-fun-0.1.0.0/t/flp-fun-tests/build/flp-fun-tests/flp-fun-tests-tmp/Main.o ) [SOLTest.ReportSpec changed]
+[6 of 6] Linking dist-newstyle/build/x86_64-linux/ghc-9.6.7/flp-fun-0.1.0.0/t/flp-fun-tests/build/flp-fun-tests/flp-fun-tests [Objects changed]
+Running 1 test suites...
+Test suite flp-fun-tests: RUNNING...
+=== Parser properties ===
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
++++ OK, passed 100 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
+*** Failed! Falsified (after 2 tests):  
+ParsedHeader {phDescription = Just "8ZKCT7ULb56W7B4", phCategory = Just "29ohYLBzrZ3C", phTags = ["gGf"], phWeight = Just 1, phParserCodes = [], phInterpreterCodes = [6]}
+"zL-sX_XZjyY8pacZG"
+["zL-sX_XZjyY8pacZG","gGf"] /= ["gGf","zL-sX_XZjyY8pacZG"]
++++ OK, passed 200 tests.
+*** Failed! Falsified (after 3 tests):  
+ParsedHeader {phDescription = Just "8qQ12vMwExpzKySoY9", phCategory = Just "g-SewbMI-AzYdm", phTags = ["YY8uNsaehD","a21S6o2Qc5M4"], phWeight = Just 2, phParserCodes = [5], phInterpreterCodes = [8,5]}
+1
+[1,8,5] /= [8,5,1]
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
+*** Failed! Falsified (after 6 tests):  
+["gjreJcCnqPupPxezvXNI","NEw3TDRw-UgqucQf","7"]
+["7","NEw3TDRw-UgqucQf","gjreJcCnqPupPxezvXNI"] /= ["gjreJcCnqPupPxezvXNI","NEw3TDRw-UgqucQf","7"]
++++ OK, passed 100 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests; 36 discarded.
++++ OK, passed 200 tests; 32 discarded.
++++ OK, passed 200 tests; 28 discarded.
++++ OK, passed 100 tests.
++++ OK, passed 200 tests; 32 discarded.
++++ OK, passed 200 tests; 33 discarded.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
+=== Filter properties ===
+*** Failed! Falsified (after 3 tests):                  
+[TestCaseDefinition {tcdName = "hZhHLzTziIJ", tcdTestSourcePath = "hZhHLzTziIJ.test", tcdStdinFile = Nothing, tcdExpectedStdoutFile = Nothing, tcdTestType = Combined, tcdDescription = Nothing, tcdCategory = "9D1Bw", tcdTags = ["81Yn9qag5G2jwYC7jhH","Tb3U"], tcdPoints = 1, tcdExpectedParserExitCodes = Nothing, tcdExpectedInterpreterExitCodes = Just [0], tcdSourceCode = ""}]
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests; 27 discarded.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests; 33 discarded.
+*** Failed! Falsified (after 1 test):  
+TestCaseDefinition {tcdName = "ZIRZgk2EQQ", tcdTestSourcePath = "ZIRZgk2EQQ.test", tcdStdinFile = Nothing, tcdExpectedStdoutFile = Nothing, tcdTestType = Combined, tcdDescription = Nothing, tcdCategory = "BSBgsrHelOBWBSEwIm", tcdTags = [], tcdPoints = 9, tcdExpectedParserExitCodes = Nothing, tcdExpectedInterpreterExitCodes = Just [0], tcdSourceCode = ""}
+=== Report properties ===
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 200 tests.
+*** Failed! Falsified (after 5 tests):  
+[("cat_c",CategoryReport {crTotalPoints = 3, crPassedPoints = 1, crTestResults = fromList [("test_0",TestCaseReport {tcrResult = Passed, tcrParserExitCode = Nothing, tcrInterpreterExitCode = Nothing, tcrParserStdout = Nothing, tcrParserStderr = Nothing, tcrInterpreterStdout = Nothing, tcrInterpreterStderr = Nothing, tcrDiffOutput = Nothing}),("test_1",TestCaseReport {tcrResult = ParseFail, tcrParserExitCode = Nothing, tcrInterpreterExitCode = Nothing, tcrParserStdout = Nothing, tcrParserStderr = Nothing, tcrInterpreterStdout = Nothing, tcrInterpreterStderr = Nothing, tcrDiffOutput = Nothing}),("test_2",TestCaseReport {tcrResult = IntFail, tcrParserExitCode = Nothing, tcrInterpreterExitCode = Nothing, tcrParserStdout = Nothing, tcrParserStderr = Nothing, tcrInterpreterStdout = Nothing, tcrInterpreterStderr = Nothing, tcrDiffOutput = Nothing})]}),("cat_b",CategoryReport {crTotalPoints = 2, crPassedPoints = 0, crTestResults = fromList [("test_0",TestCaseReport {tcrResult = ParseFail, tcrParserExitCode = Nothing, tcrInterpreterExitCode = Nothing, tcrParserStdout = Nothing, tcrParserStderr = Nothing, tcrInterpreterStdout = Nothing, tcrInterpreterStderr = Nothing, tcrDiffOutput = Nothing}),("test_1",TestCaseReport {tcrResult = ParseFail, tcrParserExitCode = Nothing, tcrInterpreterExitCode = Nothing, tcrParserStdout = Nothing, tcrParserStderr = Nothing, tcrInterpreterStdout = Nothing, tcrInterpreterStderr = Nothing, tcrDiffOutput = Nothing})]}),("cat_d",CategoryReport {crTotalPoints = 0, crPassedPoints = 0, crTestResults = fromList []})]
+["-922337203685477581.2","0.0","0.1","0.2","0.3","0.4","0.5","0.6","0.7","0.8","0.9"] /= ["0.0","0.1","0.2","0.3","0.4","0.5","0.6","0.7","0.8","0.9"]
++++ OK, passed 100 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
++++ OK, passed 200 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
+*** Failed! Falsified (after 4 tests):  
+[("cat_d",CategoryReport {crTotalPoints = 3, crPassedPoints = 0, crTestResults = fromList [("test_0",TestCaseReport {tcrResult = IntFail, tcrParserExitCode = Nothing, tcrInterpreterExitCode = Nothing, tcrParserStdout = Nothing, tcrParserStderr = Nothing, tcrInterpreterStdout = Nothing, tcrInterpreterStderr = Nothing, tcrDiffOutput = Nothing}),("test_1",TestCaseReport {tcrResult = DiffFail, tcrParserExitCode = Nothing, tcrInterpreterExitCode = Nothing, tcrParserStdout = Nothing, tcrParserStderr = Nothing, tcrInterpreterStdout = Nothing, tcrInterpreterStderr = Nothing, tcrDiffOutput = Nothing}),("test_2",TestCaseReport {tcrResult = DiffFail, tcrParserExitCode = Nothing, tcrInterpreterExitCode = Nothing, tcrParserStdout = Nothing, tcrParserStderr = Nothing, tcrInterpreterStdout = Nothing, tcrInterpreterStderr = Nothing, tcrDiffOutput = Nothing})]}),("cat_d",CategoryReport {crTotalPoints = 1, crPassedPoints = 0, crTestResults = fromList [("test_0",TestCaseReport {tcrResult = IntFail, tcrParserExitCode = Nothing, tcrInterpreterExitCode = Nothing, tcrParserStdout = Nothing, tcrParserStderr = Nothing, tcrInterpreterStdout = Nothing, tcrInterpreterStderr = Nothing, tcrDiffOutput = Nothing})]})]
+1 /= 0
+Test suite flp-fun-tests: PASS
+Test suite logged to:
+/run/media/jakub/DATA/VUT/Patak/FLP/projects/flp-proj1/flp26-haskell-project/./dist-newstyle/build/x86_64-linux/ghc-9.6.7/flp-fun-0.1.0.0/t/flp-fun-tests/test/flp-fun-0.1.0.0-flp-fun-tests.log
+1 of 1 test suites (1 of 1 test cases) passed.

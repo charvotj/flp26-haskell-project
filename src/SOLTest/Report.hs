@@ -119,7 +119,15 @@ computeStats foundCount loadedCount selectedCount mCategoryResults =
           ,tsPassedTests = Map.foldl' (+) 0 hist -- sum histogram to get total passes
           ,tsHistogram = hist
         }
-    in ts
+      emptyStats = TestStats
+        {
+          tsFoundTestFiles = foundCount
+          ,tsLoadedTests = loadedCount
+          ,tsSelectedTests = selectedCount
+          ,tsPassedTests = 0
+          ,tsHistogram = Map.empty
+        }
+    in if isJust mCategoryResults then ts else emptyStats
 
 -- ---------------------------------------------------------------------------
 -- Histogram
