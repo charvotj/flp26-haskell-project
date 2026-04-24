@@ -6,7 +6,7 @@ description:
   A command-line tool that discovers, filters, and executes test cases for
   the IPP course SOL26 parser and interpreter, producing a structured JSON report.
 license:            BSD-3-Clause
-author:             xplagia0b
+author:             xcharv22
 build-type:         Simple
 
 tested-with:
