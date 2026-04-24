@@ -16,13 +16,14 @@ module SOLTest.Executor
 where
 
 import Control.Exception (IOException, try)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, fromJust, isJust, isNothing)
 import SOLTest.Types
 import System.Directory (doesFileExist)
 import System.Exit (ExitCode (..))
 import System.IO (hClose, hPutStr)
 import System.IO.Temp (withSystemTempFile)
 import System.Process (proc, readCreateProcessWithExitCode)
+import System.Directory (getPermissions, executable)
 
 -- ---------------------------------------------------------------------------
 -- Public API
@@ -99,11 +100,33 @@ executeExecuteOnly interpPath test =
 
 -- | Execute a 'Combined' test case.
 --
--- FLP: Implement this function. You'll use @withTempSource@ here.
+-- -FLP: Implement this function. You'll use @withTempSource@ here.
 executeCombined :: FilePath -> FilePath -> TestCaseDefinition -> IO TestCaseReport
 executeCombined parserPath interpPath test = do
-  -- ?
-  return undefined
+  -- Run parser
+  parserTCR <- executeParseOnly parserPath test
+  if tcrResult parserTCR == Passed 
+    then
+      if isNothing (tcrParserStdout parserTCR) -- double check
+        then return parserTCR {
+           tcrResult = IntFail
+        }
+        else
+          -- Run interpreter on parser Stdout
+          withTempSource (fromJust $ tcrParserStdout parserTCR) $ \tmpPath -> do
+            (exitCode, iOut, iErr) <- runInterpreter interpPath tmpPath (tcdStdinFile test)
+            let code = exitCodeToInt exitCode
+                expectedCodes = fromMaybe [] (tcdExpectedInterpreterExitCodes test)
+            (result, diffOut) <- checkInterpreterResult code expectedCodes iOut (tcdExpectedStdoutFile test)
+            return
+              parserTCR
+                { tcrResult = result,
+                  tcrInterpreterExitCode = Just code,
+                  tcrInterpreterStdout = Just iOut,
+                  tcrInterpreterStderr = Just iErr,
+                  tcrDiffOutput = diffOut
+                }
+    else return parserTCR
 
 -- ---------------------------------------------------------------------------
 -- Process wrappers
@@ -146,7 +169,7 @@ runDiff actualFile expectedFile = do
 -- Runs diff only when the interpreter exited with code 0 AND a @.out@ file
 -- is present.
 --
--- FLP: Implement this function.
+-- -FLP: Implement this function.
 checkInterpreterResult ::
   -- | Actual interpreter exit code.
   Int ->
@@ -157,7 +180,17 @@ checkInterpreterResult ::
   -- | Path to the @.out@ file, if present.
   Maybe FilePath ->
   IO (TestResult, Maybe String)
-checkInterpreterResult actualCode expectedCodes iOut mOutFile = undefined
+checkInterpreterResult actualCode expectedCodes iOut mOutFile = do
+  (diffResReal, diffOutReal) <- runDiffOnOutput iOut (fromJust mOutFile)
+  let (diffResDummy, diffOutDummy) = (Passed, Nothing)
+      intRes = if actualCode `elem` expectedCodes then Passed else IntFail
+      -- run diff only when out file exists and iCode is 0
+      runDiffBool = 0 == actualCode && isJust mOutFile
+      (diffRes, diffOut) = if runDiffBool then (diffResReal, diffOutReal) else (diffResDummy, diffOutDummy)
+  return $ if intRes == IntFail
+    then (intRes, Nothing)
+    else (diffRes, diffOut)
+
 
 -- | Write a string to a temporary file and pass its path to an action.
 -- The file is deleted when the action returns.
@@ -171,9 +204,15 @@ withTempSource content action =
 -- | Write the interpreter stdout to a temp file and diff it against @.out@.
 -- The file is deleted when the action returns.
 --
--- FLP: Implement this function. It will start similarly to @withTempSource@.
+-- -FLP: Implement this function. It will start similarly to @withTempSource@.
 runDiffOnOutput :: String -> FilePath -> IO (TestResult, Maybe String)
-runDiffOnOutput iOut outFile = undefined
+runDiffOnOutput iOut outFile = do
+  (code, out) <- withTempSource iOut $ \tmpPath -> do
+                  runDiff outFile tmpPath
+  let iCode = exitCodeToInt code
+      res = if 0 == iCode then Passed else DiffFail
+      mOut = if null out ||  iCode > 1 then Nothing else Just out
+  return (res, mOut)
 
 -- | Ensure an executable path is provided and the file is executable,
 -- then run an action with it.  Returns 'Left' 'CannotExecute' if the
@@ -200,16 +239,19 @@ withExecutable (Just path) action = do
 -- The IO action returns 'Nothing' if the file is usable, or 'Just'
 -- an 'UnexecutedReason' describing the problem.
 --
--- FLP: Implement this function. The following functions may come in handy:
+-- -FLP: Implement this function. The following functions may come in handy:
 --      @doesFileExist@, @getPermissions@, @executable@
 checkExecutable :: FilePath -> IO (Maybe UnexecutedReason)
 checkExecutable path = do
   result <- try (doesFileExist path) :: IO (Either IOException Bool)
   case result of
     Left err -> return (Just (UnexecutedReason CannotExecute (Just (show err))))
-    Right False -> undefined -- ???
-    Right True -> undefined -- ???
-  return Nothing -- this probably won't be here
+    Right False -> return (Just (UnexecutedReason CannotExecute (Just "File doesn't exist.")))
+    Right True -> do 
+      perms <- getPermissions path
+      if executable perms
+      then return Nothing
+      else  return (Just (UnexecutedReason CannotExecute (Just "File doesn't have executable permittions.")))
 
 -- | Convert 'ExitCode' to an 'Int'.
 exitCodeToInt :: ExitCode -> Int
