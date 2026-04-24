@@ -118,7 +118,7 @@ parseHeaderLine hdr line
   | "--- " `isPrefixOf` line =
       let val = trim (drop 4 line)
           cond = not (all isSpace val)
-          ok = Right hdr {phTags = val : phTags hdr}
+          ok = Right hdr {phTags =  phTags hdr ++ [val]}
           err = Left ("Error - empty tag on line: " ++ line)
        in if cond then ok else err
 
@@ -131,12 +131,12 @@ parseHeaderLine hdr line
   | "!C! " `isPrefixOf` line =
       let val = readMaybe (trim (drop 4 line))
        in case val of
-          Just correct -> Right hdr {phParserCodes = correct : phParserCodes hdr}
+          Just correct -> Right hdr {phParserCodes = phParserCodes hdr ++ [correct]}
           Nothing -> Left ("Error parsing expected parser code on line: " ++ line)
   | "!I! " `isPrefixOf` line =
       let val = readMaybe (trim (drop 4 line))
        in case val of
-          Just correct -> Right hdr {phInterpreterCodes = correct : phInterpreterCodes hdr}
+          Just correct -> Right hdr {phInterpreterCodes = phInterpreterCodes hdr ++ [correct]}
           Nothing -> Left ("Error parsing expected interpreter code on line: " ++ line)
 
   | otherwise = Right hdr -- unknown or comment line: skip
