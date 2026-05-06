@@ -38,7 +38,7 @@ filterTests ::
   ([TestCaseDefinition], [TestCaseDefinition])
 filterTests spec =
   foldr (\x (sel,fil) ->
-    if matchesAny (fsUseRegex spec) (fsIncludes spec) x
+    if (null (fsIncludes spec) || matchesAny (fsUseRegex spec) (fsIncludes spec) x)
        &&
        not (matchesAny (fsUseRegex spec) (fsExcludes spec) x)
       then (x:sel,fil)
@@ -65,7 +65,7 @@ matchesCriterion _ test (ByCategory c) =
 matchesCriterion _ test (ByTag t) =
   t `elem` tcdTags test
 matchesCriterion _ test (ByAny s) =
-  matchesCriterion False test (ByTag s) || matchesCriterion False test (ByCategory s)
+  (s == tcdName test) || matchesCriterion False test (ByTag s) || matchesCriterion False test (ByCategory s)
 
 
 -- | Trim leading and trailing whitespace from a filter identifier.

@@ -148,7 +148,7 @@ computeHistogram :: Map String CategoryReport -> Map String Int
 computeHistogram categories =
   let emptyHist = Map.fromList [("0." ++ show i, 0) | i <- [0..9]::[Int]] -- AI: this list comprehension was written by ChatGPT
       addToHist c m =
-        let rate = int2Double (crPassedPoints c) / int2Double (crTotalPoints c)
+        let rate = if (crTotalPoints c) == 0 then int2Double (crPassedPoints c) / int2Double (crTotalPoints c) else 0.0
             bin = rateToBin rate
             rateValid = rate >= 0.0
         in if rateValid then Map.insertWith (+) bin 1 m else m
