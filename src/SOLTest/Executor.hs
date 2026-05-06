@@ -170,6 +170,7 @@ runDiff actualFile expectedFile = do
 -- is present.
 --
 -- -FLP: Implement this function.
+-- AI: This function was refactored by ChatGPT
 checkInterpreterResult ::
   -- | Actual interpreter exit code.
   Int ->
@@ -181,15 +182,17 @@ checkInterpreterResult ::
   Maybe FilePath ->
   IO (TestResult, Maybe String)
 checkInterpreterResult actualCode expectedCodes iOut mOutFile = do
-  (diffResReal, diffOutReal) <- runDiffOnOutput iOut (fromJust mOutFile)
-  let (diffResDummy, diffOutDummy) = (Passed, Nothing)
-      intRes = if actualCode `elem` expectedCodes then Passed else IntFail
-      -- run diff only when out file exists and iCode is 0
-      runDiffBool = 0 == actualCode && isJust mOutFile
-      (diffRes, diffOut) = if runDiffBool then (diffResReal, diffOutReal) else (diffResDummy, diffOutDummy)
-  return $ if intRes == IntFail
-    then (intRes, Nothing)
-    else (diffRes, diffOut)
+  let intRes = if actualCode `elem` expectedCodes then Passed else IntFail
+      runDiffBool = actualCode == 0 && isJust mOutFile
+
+  if intRes == IntFail
+    then return (intRes, Nothing)
+    else if runDiffBool
+      then do
+        let outFile = fromJust mOutFile
+        (diffRes, diffOut) <- runDiffOnOutput iOut outFile
+        return (diffRes, diffOut)
+      else return (Passed, Nothing)
 
 
 -- | Write a string to a temporary file and pass its path to an action.
