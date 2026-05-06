@@ -70,8 +70,8 @@ groupByCategory definitions results =
       addCats catA catB =
         CategoryReport
         {
-           crTotalPoints = crTotalPoints catA + (crTotalPoints catB)
-          ,crPassedPoints = crPassedPoints catA + (crPassedPoints catB)
+           crTotalPoints = crTotalPoints catA + crTotalPoints catB
+          ,crPassedPoints = crPassedPoints catA + crPassedPoints catB
           ,crTestResults = Map.union (crTestResults catA) (crTestResults catB)
         }
       addToCat tcd catMap =
@@ -83,8 +83,9 @@ groupByCategory definitions results =
               CategoryReport
               {
                 crTotalPoints = pts
-                ,crPassedPoints = if Passed == (tcrResult (fromJust rep)) then pts else 0
-                ,crTestResults = Map.fromList [(catName,fromJust rep)]
+                ,crPassedPoints = if Passed == tcrResult (fromJust rep) then pts else 0
+                -- key is the test name
+                ,crTestResults = Map.fromList [(name,fromJust rep)]
               }
           in
             if isJust rep then Map.insertWith addCats catName catRep catMap else catMap
@@ -108,15 +109,17 @@ computeStats ::
   -- | Category reports (Nothing in dry-run mode).
   Maybe (Map String CategoryReport) ->
   TestStats
-computeStats foundCount loadedCount selectedCount mCategoryResults = 
-  let mp = fromJust mCategoryResults 
+computeStats foundCount loadedCount selectedCount mCategoryResults =
+  let mp = fromJust mCategoryResults
       hist = computeHistogram mp
       ts = TestStats
         {
           tsFoundTestFiles = foundCount
           ,tsLoadedTests = loadedCount
           ,tsSelectedTests = selectedCount
-          ,tsPassedTests = Map.foldl' (+) 0 hist -- sum histogram to get total passes
+          ,tsPassedTests = sum $
+            map (Map.size . Map.filter (\r -> tcrResult r == Passed) . crTestResults
+            ) (Map.elems mp)
           ,tsHistogram = hist
         }
       emptyStats = TestStats
@@ -148,7 +151,7 @@ computeHistogram :: Map String CategoryReport -> Map String Int
 computeHistogram categories =
   let emptyHist = Map.fromList [("0." ++ show i, 0) | i <- [0..9]::[Int]] -- AI: this list comprehension was written by ChatGPT
       addToHist c m =
-        let rate = if (crTotalPoints c) == 0 then int2Double (crPassedPoints c) / int2Double (crTotalPoints c) else 0.0
+        let rate = if crTotalPoints c /= 0 then int2Double (crPassedPoints c) / int2Double (crTotalPoints c) else 0.0
             bin = rateToBin rate
             rateValid = rate >= 0.0
         in if rateValid then Map.insertWith (+) bin 1 m else m
