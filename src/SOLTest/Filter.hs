@@ -16,6 +16,7 @@ module SOLTest.Filter
 where
 
 import Data.Char (isSpace)
+import Data.List.Extra
 import SOLTest.Types
 
 -- ---------------------------------------------------------------------------
@@ -61,11 +62,11 @@ matchesAny useRegex criteria test =
 -- or you can simply ignore the value.
 matchesCriterion :: Bool -> TestCaseDefinition -> FilterCriterion -> Bool
 matchesCriterion _ test (ByCategory c) =
-  tcdCategory test == c
+  trim (tcdCategory test) == trim c
 matchesCriterion _ test (ByTag t) =
-  t `elem` tcdTags test
+  trim t `elem` tcdTags test
 matchesCriterion _ test (ByAny s) =
-  (s == tcdName test) || matchesCriterion False test (ByTag s) || matchesCriterion False test (ByCategory s)
+  (trim s == tcdName test) || matchesCriterion False test (ByTag (trim s)) || matchesCriterion False test (ByCategory (trim s))
 
 
 -- | Trim leading and trailing whitespace from a filter identifier.
